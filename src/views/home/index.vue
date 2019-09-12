@@ -6,7 +6,7 @@
           <div class="out-border">
             <div class="layout-title">后台项目</div>
             <div class="color-main address-content">
-              <a href="https://github.com/macrozheng/mall">mall</a>
+              <a href="https://github.com/GZYangKui/vertx-mall">mall</a>
             </div>
           </div>
         </el-col>
@@ -14,15 +14,7 @@
           <div class="out-border">
             <div class="layout-title">前端项目</div>
             <div class="color-main address-content">
-              <a href="https://github.com/macrozheng/mall-admin-web">mall-admin-web</a>
-            </div>
-          </div>
-        </el-col>
-        <el-col :span="6">
-          <div class="out-border">
-            <div class="layout-title">学习教程</div>
-            <div class="color-main address-content">
-              <a href="https://github.com/macrozheng/mall-learning">mall-learning</a>
+              <a href="https://github.com/GZYangKui/vertx-admin-mall-web">mall-admin-web</a>
             </div>
           </div>
         </el-col>
@@ -51,23 +43,16 @@
             <div class="total-value">￥5000.00</div>
           </div>
         </el-col>
-        <!--<el-col :span="6">-->
-          <!--<div class="total-frame">-->
-            <!--<svg-icon icon-class="total-week" class="total-icon">-->
-            <!--</svg-icon>-->
-            <!--<div class="total-title">近7天销售总额</div>-->
-            <!--<div class="total-value">￥50000.00</div>-->
-          <!--</div>-->
-        <!--</el-col>-->
+        <el-col :span="6">
+          <div class="total-frame">
+            <svg-icon icon-class="total-week" class="total-icon">
+            </svg-icon>
+            <div class="total-title">近7天销售总额</div>
+            <div class="total-value">￥50000.00</div>
+          </div>
+        </el-col>
       </el-row>
     </div>
-    <el-card class="mine-layout">
-      <div style="text-align: center">
-        <img width="150px" height="150px" src="http://macro-oss.oss-cn-shenzhen.aliyuncs.com/mall/banner/qrcode_for_macrozheng_258.jpg">
-      </div>
-      <div style="text-align: center">mall全套学习教程连载中！</div>
-      <div style="text-align: center;margin-top: 5px"><span class="color-main">关注公号</span>，第一时间获取。</div>
-    </el-card>
     <div class="un-handle-layout">
       <div class="layout-title">待处理事务</div>
       <div class="un-handle-content">
@@ -249,8 +234,9 @@
   import img_home_order from '@/assets/images/home_order.png';
   import img_home_today_amount from '@/assets/images/home_today_amount.png';
   import img_home_yesterday_amount from '@/assets/images/home_yesterday_amount.png';
+
   const DATA_FROM_BACKEND = {
-    columns: ['date', 'orderCount','orderAmount'],
+    columns: ['date', 'orderCount', 'orderAmount'],
     rows: [
       {date: '2018-11-01', orderCount: 10, orderAmount: 1093},
       {date: '2018-11-02', orderCount: 20, orderAmount: 2230},
@@ -301,9 +287,10 @@
         orderCountDate: '',
         chartSettings: {
           xAxisType: 'time',
-          area:true,
-          axisSite: { right: ['orderAmount']},
-        labelMap: {'orderCount': '订单数量', 'orderAmount': '订单金额'}},
+          area: true,
+          axisSite: {right: ['orderAmount']},
+          labelMap: {'orderCount': '订单数量', 'orderAmount': '订单金额'}
+        },
         chartData: {
           columns: [],
           rows: []
@@ -315,35 +302,35 @@
         img_home_yesterday_amount
       }
     },
-    created(){
+    created() {
       this.initOrderCountDate();
       this.getData();
     },
-    methods:{
-      handleDateChange(){
+    methods: {
+      handleDateChange() {
         this.getData();
       },
-      initOrderCountDate(){
+      initOrderCountDate() {
         let start = new Date();
         start.setFullYear(2018);
         start.setMonth(10);
         start.setDate(1);
         const end = new Date();
         end.setTime(start.getTime() + 1000 * 60 * 60 * 24 * 7);
-        this.orderCountDate=[start,end];
+        this.orderCountDate = [start, end];
       },
-      getData(){
+      getData() {
         setTimeout(() => {
           this.chartData = {
-            columns: ['date', 'orderCount','orderAmount'],
+            columns: ['date', 'orderCount', 'orderAmount'],
             rows: []
           };
-          for(let i=0;i<DATA_FROM_BACKEND.rows.length;i++){
-            let item=DATA_FROM_BACKEND.rows[i];
-            let currDate=str2Date(item.date);
-            let start=this.orderCountDate[0];
-            let end=this.orderCountDate[1];
-            if(currDate.getTime()>=start.getTime()&&currDate.getTime()<=end.getTime()){
+          for (let i = 0; i < DATA_FROM_BACKEND.rows.length; i++) {
+            let item = DATA_FROM_BACKEND.rows[i];
+            let currDate = str2Date(item.date);
+            let start = this.orderCountDate[0];
+            let end = this.orderCountDate[1];
+            if (currDate.getTime() >= start.getTime() && currDate.getTime() <= end.getTime()) {
               this.chartData.rows.push(item);
             }
           }
@@ -440,6 +427,7 @@
     margin-top: 20px;
     border: 1px solid #DCDFE6;
   }
+
   .mine-layout {
     position: absolute;
     right: 140px;
@@ -447,7 +435,8 @@
     width: 250px;
     height: 235px;
   }
-  .address-content{
+
+  .address-content {
     padding: 20px;
     font-size: 18px
   }
