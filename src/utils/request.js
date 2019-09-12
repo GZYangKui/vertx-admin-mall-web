@@ -1,70 +1,63 @@
 import axios from 'axios'
-import {MessageBox, Message} from 'element-ui'
-import store from '@/store'
-import {getToken} from '@/utils/auth'
+import { Message, MessageBox } from 'element-ui'
+import store from '../store'
+import { getToken } from '@/utils/auth'
 
-// 创建axios实例对象
+// 创建axios实例
 const service = axios.create({
-  //设置base-api
-  baseURL: process.env.VUE_APP_BASE_API,
-  //请求超时
-  timeout: 5000
+  baseURL: process.env.BASE_API, // api的base_url
+  timeout: 15000 // 请求超时时间
 })
 
-// http请求拦截器
-service.interceptors.request.use(
-  config => {
-
-    if (store.getters.token) {
-
-      config.headers['X-Token'] = getToken()
-    }
-    return config
-  },
-  error => {
-    // do something with request error
-    console.log(error);// for debug
-    return Promise.reject(error)
+// request拦截器
+service.interceptors.request.use(config => {
+  if (store.getters.token) {
+    config.headers['Authorization'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
   }
-)
+  return config
+}, error => {
+  // Do something with request error
+  console.log(error) // for debug
+  Promise.reject(error)
+})
 
-// 服务器回复拦截器
+// respone拦截器
 service.interceptors.response.use(
   response => {
-    const res = response.data;
-    //做异常状态匹配
-    if (res.code !== 200 || (res.code === 200 && !res.flag)) {
-      if (res.code === 403) {
-        MessageBox.confirm('请重新登录', {
+  /**
+  * code为非200是抛错 可结合自己业务进行修改
+  */
+    const res = response.data
+    if (res.code !== 200) {
+      Message({
+        message: res.message,
+        type: 'error',
+        duration: 3 * 1000
+      })
+
+      // 401:未登录;
+      if (res.code === 401||res.code === 403) {
+        MessageBox.confirm('你已被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
           confirmButtonText: '重新登录',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          //TODO
+          store.dispatch('FedLogOut').then(() => {
+            location.reload()// 为了重新实例化vue-router对象 避免bug
+          })
         })
-      } else if (res.code === 200) {
-        Message({
-          message: res.message || '未知原因',
-          type: "warning",
-          duration: 5 * 1000
-        });
-      } else {
-        Message({
-          message: "服务器响应异常,状态码:" + response.status,
-          type: "warning",
-          duration: 5 * 1000
-        });
       }
-      return Promise.reject("error");
+      return Promise.reject('error')
+    } else {
+      return response.data
     }
-    return res.data;
   },
   error => {
-    console.log('err' + error) // for debug
+    console.log('err' + error)// for debug
     Message({
       message: error.message,
       type: 'error',
-      duration: 5 * 1000
+      duration: 3 * 1000
     })
     return Promise.reject(error)
   }
