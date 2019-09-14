@@ -1,9 +1,9 @@
 import request from '@/utils/request'
-export function fetchList(data) {
+export function fetchList(params) {
   return request({
     url:'/product/list',
-    method:'post',
-    data:data
+    method:'get',
+    params:params
   })
 }
 
