@@ -102,7 +102,8 @@
         listQuery: {
           pageNum: 1,
           pageSize: 5,
-          type: this.$route.query.type
+          type: this.$route.query.type,
+          cid: null
         },
         operateType: null,
         multipleSelection: [],
@@ -120,14 +121,18 @@
     methods: {
       getList() {
         this.listLoading = true;
-        fetchList(this.$route.query.cid, this.listQuery).then(response => {
+        this.listQuery.cid = this.$route.query.cid;
+        fetchList(this.listQuery).then(response => {
           this.listLoading = false;
           this.list = response.data.list;
           this.total = response.data.total;
         });
       },
       addProductAttr() {
-        this.$router.push({path:'/pms/addProductAttr',query:{cid:this.$route.query.cid,type:this.$route.query.type}});
+        this.$router.push({
+          path: '/pms/addProductAttr',
+          query: {cid: this.$route.query.cid, type: this.$route.query.type}
+        });
       },
       handleSelectionChange(val) {
         this.multipleSelection = val;
@@ -165,7 +170,7 @@
         this.getList();
       },
       handleUpdate(index, row) {
-        this.$router.push({path:'/pms/updateProductAttr',query:{id:row.id}});
+        this.$router.push({path: '/pms/updateProductAttr', query: {id: row.id}});
       },
       handleDeleteProductAttr(ids) {
         this.$confirm('是否要删除该属性', '提示', {
