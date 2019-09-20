@@ -125,7 +125,7 @@
       getCateList() {
         let listQuery = {pageNum: 1, pageSize: 100};
         fetchList(listQuery).then(response => {
-          this.productAttrCateList = response.data.list;
+          this.productAttrCateList = response.data;
         });
       },
       resetProductAttr() {
