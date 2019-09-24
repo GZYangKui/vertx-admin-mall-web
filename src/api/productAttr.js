@@ -25,14 +25,14 @@ export function createProductAttr(data) {
 
 export function updateProductAttr(id,data) {
   return request({
-    url:'/productAttribute/update/'+id,
+    url:'/productAttribute/update?id='+id,
     method:'post',
     data:data
   })
 }
 export function getProductAttr(id) {
   return request({
-    url:'/productAttribute/'+id,
+    url:'/productAttribute/detail?attrId='+id,
     method:'get'
   })
 }
