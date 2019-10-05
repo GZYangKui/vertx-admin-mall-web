@@ -46,7 +46,7 @@
               @change="handleShowStatusChange(scope.$index, scope.row)"
               :active-value="1"
               :inactive-value="0"
-              v-model="scope.row.showStatus">
+              v-model="scope.row.showstatus">
             </el-switch>
           </template>
         </el-table-column>
@@ -97,7 +97,7 @@
 </template>
 
 <script>
-  import {fetchList,deleteProductCate,updateShowStatus,updateNavStatus} from '@/api/productCate'
+  import {fetchList, deleteProductCate, updateShowStatus, updateNavStatus} from '@/api/productCate'
 
   export default {
     name: "productCateList",
@@ -124,7 +124,7 @@
       }
     },
     methods: {
-      resetParentId(){
+      resetParentId() {
         if (this.$route.query.parentId != null) {
           this.parentId = this.$route.query.parentId;
         } else {
@@ -138,8 +138,8 @@
         this.listLoading = true;
         fetchList(this.parentId, this.listQuery).then(response => {
           this.listLoading = false;
-          this.list = response.data.list;
-          this.total = response.data.total;
+          this.list = response.data;
+          this.total = response.total;
         });
       },
       handleSizeChange(val) {
@@ -153,11 +153,11 @@
       },
       handleNavStatusChange(index, row) {
         let data = new URLSearchParams();
-        let ids=[];
+        let ids = [];
         ids.push(row.id)
-        data.append('ids',ids);
-        data.append('navStatus',row.navStatus);
-        updateNavStatus(data).then(response=>{
+        data.append('ids', ids);
+        data.append('navStatus', row.navStatus);
+        updateNavStatus(data).then(response => {
           this.$message({
             message: '修改成功',
             type: 'success',
@@ -167,11 +167,11 @@
       },
       handleShowStatusChange(index, row) {
         let data = new URLSearchParams();
-        let ids=[];
+        let ids = [];
         ids.push(row.id)
-        data.append('ids',ids);
-        data.append('showStatus',row.showStatus);
-        updateShowStatus(data).then(response=>{
+        data.append('ids', ids);
+        data.append('showStatus', row.showstatus);
+        updateShowStatus(data).then(response => {
           this.$message({
             message: '修改成功',
             type: 'success',
@@ -186,7 +186,7 @@
         console.log('handleAddProductCate');
       },
       handleUpdate(index, row) {
-        this.$router.push({path:'/pms/updateProductCate',query:{id:row.id}});
+        this.$router.push({path: '/pms/updateProductCate', query: {id: row.id}});
       },
       handleDelete(index, row) {
         this.$confirm('是否要删除该品牌', '提示', {
